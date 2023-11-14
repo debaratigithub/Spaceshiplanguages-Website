@@ -1,3 +1,4 @@
+"use client";
 import { Grid, Box, Typography, Stack, Theme } from "@mui/material";
 import Image from "next/image";
 import loginBanner from "../../../public/images/blogdetlbnr.png";

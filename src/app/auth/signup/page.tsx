@@ -26,6 +26,15 @@ import { styles } from "../../styles";
 import SocialLinks from "@/components/Auth/SocialLinks";
 import userImg from "../../../../public/images/usericon.png";
 import CameraAltOutlinedIcon from "@mui/icons-material/CameraAltOutlined";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import Button, { buttonClasses } from "@mui/material/Button";
+import { toast } from "react-toastify";
+
+//Redux Toolkit
+import { useAppDispatch, useAppSelector } from "../../../reduxts/hooks";
+import { signupData } from "../../../reduxts/Slices/studentauthslice/signupslice";
+
 const authbg = (theme: Theme) => ({
   background: "#fad237 url(../images/authenticationbg.jpg) center 0 no-repeat",
   fontFamily: "'Karla', sans-serif",
@@ -191,9 +200,52 @@ const uploadBtn = () => ({
   top: "0",
 });
 
+const commonButton = () => ({
+  margin: "10px 0",
+  padding: "10px 20px",
+  backgroundColor: "#D91962!important",
+  color: "#fff",
+  border: "none",
+  borderRadius: "50px",
+  fontSize: "16px",
+  textTransform: "capitalize",
+  "&:hover": {
+    backgroundColor: "#edc627!important",
+    border: "none",
+  },
+});
+
+interface FormData {
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  role: string;
+}
+
+interface FormDatanew {
+  email: string;
+  password: string;
+  name: string;
+  role: string;
+}
+
 const Signup = () => {
-  const [showPassword, setShowPassword] = React.useState(false);
-  const [confirmPassword, setConfirmPassword] = React.useState(false);
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState(false);
+
+  const [formData, setFormData] = useState<FormData>({
+    email: "",
+    password: "",
+    firstName: "",
+    lastName: "",
+    role: "student",
+  });
+
+  const [formconfirmPassword, setFormonfirmPassword] = useState<String>("");
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleConfirmPassword = () =>
@@ -205,11 +257,53 @@ const Signup = () => {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+
+    const fullName = `${formData.firstName} ${formData.lastName}`;
+
+    const updatedFormData: Omit<FormData, "firstName" | "lastName"> & {
+      name: string;
+    } = {
+      email: formData.email,
+      password: formData.password,
+      name: fullName,
+      role: formData.role,
+    };
+
+    console.log("Updated Form Data:", updatedFormData);
+    console.log(formData, "++++++");
+
+    if (formData.password !== formconfirmPassword) {
+      toast.error("Passwords do not match");
+
+      return;
+    } else {
+      dispatch(signupData(updatedFormData)).then((response: any) => {
+        console.log(response.payload, "response from login component");
+
+        if (response.payload.status == true) {
+          console.log("routing is done");
+          //router.push("/dashboard");
+        } else {
+          console.log("routing is not done");
+        }
+      });
+    }
+
+    // dispatch(signupData(updatedFormData)).then((response: any) => {
+    //   console.log(response.payload, "response from login component");
+
+    //   if (response.payload.status == true) {
+    //     console.log("routing is done");
+    //     //router.push("/dashboard");
+    //   } else {
+    //     console.log("routing is not done");
+    //   }
+    // });
+    // const data = new FormData(event.currentTarget);
+    // console.log({
+    //   email: data.get("email"),
+    //   password: data.get("password"),
+    // });
   };
 
   return (
@@ -243,6 +337,10 @@ const Signup = () => {
                     label="First Name"
                     name="firstName"
                     autoComplete="firstName"
+                    value={formData.firstName}
+                    onChange={(e) =>
+                      setFormData({ ...formData, firstName: e.target.value })
+                    }
                   />
                 </Grid>
                 <Grid item xs={12} md={6}>
@@ -253,6 +351,10 @@ const Signup = () => {
                     label="Last Name"
                     name="lastName"
                     autoComplete="lastName"
+                    value={formData.lastName}
+                    onChange={(e) =>
+                      setFormData({ ...formData, lastName: e.target.value })
+                    }
                   />
                 </Grid>
 
@@ -264,6 +366,10 @@ const Signup = () => {
                     label="Enter your email"
                     name="email"
                     autoComplete="email"
+                    value={formData.email}
+                    onChange={(e) =>
+                      setFormData({ ...formData, email: e.target.value })
+                    }
                   />
                 </Grid>
                 <Grid item xs={12} md={6}>
@@ -297,11 +403,16 @@ const Signup = () => {
                             onMouseDown={handleMouseDownPassword}
                             edge="end"
                           >
-                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                            {/* {showPassword ? <VisibilityOff /> : <Visibility />} */}
+                            {showPassword ? <Visibility /> : <VisibilityOff />}
                           </IconButton>
                         </InputAdornment>
                       }
                       label="Password"
+                      value={formData.password}
+                      onChange={(e) =>
+                        setFormData({ ...formData, password: e.target.value })
+                      }
                     />
                   </FormControl>
                 </Grid>
@@ -325,22 +436,40 @@ const Signup = () => {
                             onMouseDown={handleMouseDownPassword}
                             edge="end"
                           >
-                            {confirmPassword ? (
+                            {/* {confirmPassword ? (
                               <VisibilityOff />
                             ) : (
                               <Visibility />
+                            )} */}
+
+                            {confirmPassword ? (
+                              <Visibility />
+                            ) : (
+                              <VisibilityOff />
                             )}
                           </IconButton>
                         </InputAdornment>
                       }
                       label="Confirm Password"
+                      value={formconfirmPassword}
+                      onChange={(e) => setFormonfirmPassword(e.target.value)}
                     />
                   </FormControl>
                 </Grid>
               </Grid>
 
               <FormControl sx={logBtn}>
-                <ButtonUse name={"Signup to Continue"} />
+                {/* <Link href="signup/otp">
+                  <ButtonUse name={"Signup to Continue"} />
+                </Link> */}
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="outlined"
+                  sx={commonButton}
+                >
+                  Signup to Continue
+                </Button>
               </FormControl>
 
               <Typography variant="h6" component="div" sx={or}>

@@ -7,7 +7,7 @@ import {
   Stack,
   Theme,
 } from "@mui/material";
-import Image from "next/image";
+import Image, { StaticImageData } from "next/image";
 import ButtonUse from "../ButtonUse";
 import dtIcon from "../../../public/images/dt.png";
 
@@ -15,7 +15,7 @@ type ItemsProps = {
   name?: string;
   description?: string;
   languages?: string[];
-  image?: HTMLImageElement;
+  image?: StaticImageData | string;
   price?: number;
   itemData: ItemData;
 };
@@ -23,18 +23,18 @@ type ItemData = {
   name?: string;
   description?: string;
   languages?: string[];
-  image?: HTMLImageElement;
+  image?: StaticImageData | string;
   price?: number;
   date?: string;
+  actionBar?: boolean;
 };
-const CardUI = (props: ItemsProps, action: boolean) => {
-  const { name, date, description, image, languages } = props.itemData;
+const CardUI = (props: ItemsProps) => {
+  const { name, date, description, image, languages, actionBar } =
+    props.itemData;
 
   return (
     <Card elevation={0} sx={productCard}>
-      {image && (
-        <Image src={image.src} height={205} width={500} alt="alt text" />
-      )}
+      {image && <Image src={image} height={205} width={500} alt="alt text" />}
       <CardContent>
         {date && (
           <Stack direction="row" sx={dategap}>
@@ -58,7 +58,7 @@ const CardUI = (props: ItemsProps, action: boolean) => {
             <Chip sx={langBtn} key={index} label={language} />
           ))}
       </CardContent>
-      {action == true ? (
+      {actionBar && (
         <CardActions sx={cardAction}>
           <Stack>
             <Typography variant="h5" sx={lessonTxt}>
@@ -70,7 +70,7 @@ const CardUI = (props: ItemsProps, action: boolean) => {
           </Stack>
           <ButtonUse name="Book Session" />
         </CardActions>
-      ) : null}
+      )}
     </Card>
   );
 };

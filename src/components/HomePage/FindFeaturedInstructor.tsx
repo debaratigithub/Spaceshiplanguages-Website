@@ -1,3 +1,4 @@
+"use client";
 import { Box, Stack, Theme, Typography } from "@mui/material";
 import insTructor from "../../../public/images/feat1.jpg";
 
@@ -19,6 +20,7 @@ const InstructData = [
     languages: ["english", "spanish", "french"],
     image: insTructor,
     price: 200,
+    actionBar: true,
   },
   {
     name: "David Esposito 2",
@@ -27,6 +29,7 @@ const InstructData = [
     languages: ["english", "spanish", "french"],
     image: insTructor,
     price: 250,
+    actionBar: true,
   },
   {
     name: "David Esposito 3",
@@ -35,6 +38,7 @@ const InstructData = [
     languages: ["english", "spanish", "french"],
     image: insTructor,
     price: 270,
+    actionBar: true,
   },
   {
     name: "David Esposito 3",
@@ -43,6 +47,7 @@ const InstructData = [
     languages: ["english", "spanish", "french"],
     image: insTructor,
     price: 270,
+    actionBar: true,
   },
   {
     name: "David Esposito 3",
@@ -51,6 +56,7 @@ const InstructData = [
     languages: ["english", "spanish", "french"],
     image: insTructor,
     price: 270,
+    actionBar: true,
   },
   {
     name: "David Esposito 3",
@@ -59,6 +65,7 @@ const InstructData = [
     languages: ["english", "spanish", "french"],
     image: insTructor,
     price: 270,
+    actionBar: true,
   },
 ];
 
@@ -81,7 +88,7 @@ const FindFeaturedInstructor = () => {
           >
             {InstructData.map((item, index) => (
               <SwiperSlide key={index}>
-                <CardUI itemData={item} action={true} />
+                <CardUI itemData={item} />
               </SwiperSlide>
             ))}
           </Swiper>

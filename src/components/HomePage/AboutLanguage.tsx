@@ -3,6 +3,7 @@ import Image from "next/image";
 import ButtonUse from "../ButtonUse";
 import knowBg from "../../../public/images/know.png";
 import { styles } from "../../app/styles";
+import Link from "next/link";
 
 const AboutLanguage = () => {
   return (
@@ -48,7 +49,9 @@ const AboutLanguage = () => {
               distribution of letters.
             </Typography>
 
-            <ButtonUse name="Become an Instructor" />
+            <Link href="become-an-instructor">
+              <ButtonUse name="Become an Instructor" />
+            </Link>
           </Stack>
         </Grid>
         <Grid item xs={6} sm={6}>

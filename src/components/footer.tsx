@@ -1,9 +1,8 @@
 "use client";
-import { Box, Theme, Typography, Grid } from "@mui/material";
+import { Box, Theme, Typography, Grid, Stack } from "@mui/material";
 import Image from "next/image";
 import logo from "../../public/images/footerlogo.png";
 
-import Item from "@mui/material/ListItem";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -57,12 +56,12 @@ const Footer = () => {
       <Box sx={bottomfooter}>
         <Grid container sx={styles.container}>
           <Grid item sm={12} md={6}>
-            <Item sx={copyrgt}>
+            <Stack sx={copyrgt}>
               &copy; 2023, SPACESHIP LANGUAGES. ALL RIGHTS RESERVED.
-            </Item>
+            </Stack>
           </Grid>
           <Grid item sm={12} md={6}>
-            <Item sx={menuitem}>
+            <Stack sx={menuitem}>
               <Typography sx={followUs}>Follow Us On : </Typography>
               <Typography sx={socialicn}>
                 <Link href="/">
@@ -84,7 +83,7 @@ const Footer = () => {
                   <YouTubeIcon />
                 </Link>
               </Typography>
-            </Item>
+            </Stack>
           </Grid>
         </Grid>
       </Box>
@@ -131,6 +130,7 @@ const menuitem = (theme: Theme) => ({
   justifyContent: "flex-end",
   alignItems: "center",
   height: "100%",
+  flexDirection: "row",
   [theme.breakpoints.only("sm")]: {
     textAlign: "center",
     display: "flex",
@@ -177,11 +177,6 @@ const copyrgt = (theme: Theme) => ({
   fontWeight: "400",
   [theme.breakpoints.down("xl")]: {
     fontSize: "1rem",
-  },
-  [theme.breakpoints.only("sm")]: {
-    textAlign: "center",
-    display: "flex",
-    justifyContent: "center",
   },
 });
 

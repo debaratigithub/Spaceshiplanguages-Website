@@ -1,3 +1,4 @@
+"use client";
 import CommonLayout from "@/components/CommonLayout";
 import FindFeaturedInstructor from "@/components/HomePage/FindFeaturedInstructor";
 import FindRightInstructor from "@/components/HomePage/FindRightInstructor";

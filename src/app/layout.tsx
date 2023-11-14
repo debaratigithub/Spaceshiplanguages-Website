@@ -2,6 +2,9 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import ThemeLayer from "@/components/ThemeLayer";
+import {Providers} from '../reduxts/provider'
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,7 +21,21 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body suppressHydrationWarning={true}>
-        <ThemeLayer>{children}</ThemeLayer>
+        <ThemeLayer>
+        <Providers>
+        {children}
+        </Providers>
+       
+        <ToastContainer
+        position="top-center"
+        autoClose={1000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        pauseOnFocusLoss
+        draggable
+      />
+        </ThemeLayer>
       </body>
     </html>
   );

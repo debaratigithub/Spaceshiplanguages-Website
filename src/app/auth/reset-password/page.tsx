@@ -13,6 +13,20 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import ButtonUse from "../../../components/ButtonUse";
 import CommonLayout from "../../../components/CommonLayout";
 import { styles } from "../../styles";
+import Button, { buttonClasses } from "@mui/material/Button";
+
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
+
+//Redux Toolkit
+import { useAppDispatch, useAppSelector } from "../../../reduxts/hooks";
+import { resetPassword} from "../../../reduxts/Slices/studentauthslice/resetpassword";
+
+
+
+
+
 
 const authbg = (theme: Theme) => ({
   background: "#fad237 url(../images/authenticationbg.jpg) center 0 no-repeat",
@@ -93,24 +107,107 @@ const logBtn = (theme: Theme) => ({
   },
 });
 
+const commonButton = () => ({
+  margin: "10px 0",
+  padding: "10px 20px",
+  backgroundColor: "#D91962!important",
+  color: "#fff",
+  border: "none",
+  borderRadius: '50px',
+  fontSize: "16px",
+  textTransform: "capitalize",
+  "&:hover": {
+    backgroundColor: "#edc627!important",
+    border: "none",
+  },
+});
+
+interface FormData {
+  token: string;
+  password: string;
+ 
+}
+
+
+
 const ResetPassword = () => {
-  const [showPassword, setShowPassword] = React.useState(false);
-  const [confirmPassword, setConfirmPassword] = React.useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState(false);
+
+
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+  const [tokendata, setTokendata] = useState<any>("")
+  const [formData, setFormData] = useState<FormData>({
+    token:'',
+    password: ''
+  });
+
+  const [formconfirmPassword, setFormonfirmPassword] = useState<String>('');
+  
+  useEffect(() => {
+    setTokendata(localStorage.getItem("Resetpasswordtoken"))
+    setFormData({
+      token:tokendata,
+      password: ''
+    })
+    
+  }, [tokendata])
+  
+
+
+  //console.log(tokendata,"LLLLLLLLLLLLLL",formData)
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleConfirmPassword = () =>
     setConfirmPassword((confPass) => !confPass);
 
-  const handleMouseDownPassword = (event: any) => {
-    event.preventDefault();
+  // const handleMouseDownPassword = (event: any) => {
+  //   event.preventDefault();
+  // };
+
+  const [mouseDown, setMouseDown] = useState(false);
+
+  const handleMouseDownPassword = (e:any) => {
+    e.preventDefault();
+    setMouseDown(true);
   };
+
+  const handleMouseUpPassword = () => {
+    setMouseDown(false);
+  };
+
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
+    // const data = new FormData(event.currentTarget);
+    // console.log({
+    //   email: data.get("email"),
+    //   password: data.get("password"),
+    // });
+    console.log("clicked",formData,formconfirmPassword);
+    if (formData.password !== formconfirmPassword) {
+      toast.error('Passwords do not match');
+      // alert('Passwords do not match');
+      return;
+    }
+    else{
+      //alert('Passwords  match');
+        dispatch(resetPassword(formData)).then((response: any) => {
+      console.log(response.payload, "response from login component");
+
+      if (response.payload.status == true) {
+        console.log("routing is done");
+        router.push("/auth/login");
+      } else {
+        console.log("routing is not done");
+      }
     });
+    }
+
+
+    
+    
   };
 
   return (
@@ -120,7 +217,7 @@ const ResetPassword = () => {
           <Box sx={authform}>
             <Typography variant="h4">Reset Password</Typography>
             <Typography variant="h6" component="p">
-              Please enter your email Id that you have registered.
+              Please set your new password
             </Typography>
             <Box
               component="form"
@@ -144,14 +241,20 @@ const ResetPassword = () => {
                       <IconButton
                         aria-label="toggle password visibility"
                         onClick={handleClickShowPassword}
-                        onMouseDown={handleMouseDownPassword}
+                       // onMouseDown={handleMouseDownPassword}
+                       onMouseDown={handleMouseDownPassword}
+              onMouseUp={handleMouseUpPassword}
+              onMouseLeave={handleMouseUpPassword}
                         edge="end"
                       >
-                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                        {showPassword ? <Visibility /> : <VisibilityOff />}
+                        {/* {showPassword ? <VisibilityOff /> : <Visibility />} */}
                       </IconButton>
                     </InputAdornment>
                   }
                   label="Password"
+                  value={formData.password}
+                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                 />
               </FormControl>
 
@@ -170,16 +273,28 @@ const ResetPassword = () => {
                         onMouseDown={handleMouseDownPassword}
                         edge="end"
                       >
-                        {confirmPassword ? <VisibilityOff /> : <Visibility />}
+                        {/* {confirmPassword ? <VisibilityOff /> : <Visibility />} */}
+                        {confirmPassword  ? <Visibility /> : <VisibilityOff />}
                       </IconButton>
                     </InputAdornment>
                   }
                   label="Confirm Password"
+                  value={formconfirmPassword}
+                  onChange={(e) => setFormonfirmPassword( e.target.value)}
                 />
               </FormControl>
 
               <FormControl sx={logBtn}>
-                <ButtonUse name={"Submit"} />
+                {/* <ButtonUse name={"Submit"} /> */}
+
+                <Button
+                type="submit"
+                fullWidth
+                variant="outlined"
+                sx={commonButton}
+              >
+                Submit
+              </Button>
               </FormControl>
             </Box>
           </Box>

@@ -119,8 +119,8 @@ const Header = () => {
 
   const navlinks = [
     { link_label: "Find an Instructor", href: "/find-an-instructor" },
-    { link_label: "Become an Instructor", href: "/becomeaninstructor" },
-    { link_label: "Our Story", href: "/ourstory" },
+    { link_label: "Become an Instructor", href: "/become-an-instructor" },
+    { link_label: "Our Story", href: "" },
   ];
 
   // console.log(typeof theme, "hgjkgh");

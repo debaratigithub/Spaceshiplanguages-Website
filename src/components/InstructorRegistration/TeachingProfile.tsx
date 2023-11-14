@@ -64,9 +64,10 @@ const TeachingProfile = (props: TeachingProps) => {
   const [filename, setFilename] = useState<string | undefined>();
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const fileUrl = event?.target?.files;
-    setFile(URL.createObjectURL(fileUrl?.item(0)));
-    setFilename(fileUrl?.item(0)?.name);
+    // const fileUrl = event?.target?.files;
+    // setFile(URL.createObjectURL(fileUrl?.item(0) as blob));
+    // setFilename(fileUrl?.item(0)?.name);
+    console.log("file upload");
   };
   const handleCountry = (event: SelectChangeEvent) => {
     setCountry(event.target.value);
@@ -309,12 +310,12 @@ const TeachingProfile = (props: TeachingProps) => {
               >
                 Upload File Document
                 <input type="file" hidden onChange={handleFileUpload} />
-                {file && (
+                {/* {file && (
                   <Stack sx={uploadedFile}>
                     <Image src={file} width={80} height={80} alt={file} />
                     <Typography sx={uploadedFilename}>{filename}</Typography>
                   </Stack>
-                )}
+                )} */}
               </Button>
             </Grid>
           </Grid>

@@ -1,3 +1,5 @@
+"use client";
+
 import { Box, Grid, Stack, Theme, Typography } from "@mui/material";
 
 // Import Swiper React components

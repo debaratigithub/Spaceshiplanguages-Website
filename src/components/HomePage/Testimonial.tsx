@@ -1,3 +1,4 @@
+"use client";
 import { Box, Card, Grid, Stack, Theme, Typography } from "@mui/material";
 import Image from "next/image";
 import blg from "../../../public/images/latestblog.jpg";

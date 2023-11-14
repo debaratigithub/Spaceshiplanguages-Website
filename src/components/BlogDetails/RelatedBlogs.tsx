@@ -1,3 +1,5 @@
+"use client";
+
 import { styles } from "@/app/styles";
 import { Box, Grid, Typography } from "@mui/material";
 import blogImage from "../../../public/images/latestblog.jpg";

@@ -15,6 +15,14 @@ import ButtonUse from "../../../components/ButtonUse";
 import CommonLayout from "../../../components/CommonLayout";
 import { styles } from "../../styles";
 
+import { useEffect, useState } from "react";
+import Button, { buttonClasses } from "@mui/material/Button";
+import { useRouter } from "next/navigation";
+
+//Redux Toolkit
+import { useAppDispatch, useAppSelector } from "../../../reduxts/hooks";
+import { forgotPasswordData } from "../../../reduxts/Slices/studentauthslice/forgotpasswordslice";
+
 const authbg = (theme: Theme) => ({
   background: "#fad237 url(../images/authenticationbg.jpg) center 0 no-repeat",
   fontFamily: "'Karla', sans-serif",
@@ -94,14 +102,57 @@ const logBtn = (theme: Theme) => ({
   },
 });
 
+
+const commonButton = () => ({
+  margin: "10px 0",
+  padding: "10px 20px",
+  backgroundColor: "#D91962!important",
+  color: "#fff",
+  border: "none",
+  borderRadius: '50px',
+  fontSize: "16px",
+  textTransform: "capitalize",
+  "&:hover": {
+    backgroundColor: "#edc627!important",
+    border: "none",
+  },
+});
+
+interface FormData {
+  email: string;
+  role: string;
+}
+
 const ForgotPassword = () => {
+
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+
+  const [formData, setFormData] = useState<FormData>({
+    email: '',
+    role: 'student',
+  });
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
+
+    console.log("clicked",formData);
+
+    dispatch(forgotPasswordData(formData)).then((response: any) => {
+      console.log(response.payload, "response from login component");
+
+      if (response.payload.status == true) {
+        console.log("routing is done");
+        router.push("/auth/verify-forgetpassword");
+      } else {
+        console.log("routing is not done");
+      }
     });
+    // const data = new FormData(event.currentTarget);
+    // console.log({
+    //   email: data.get("email"),
+    //   password: data.get("password"),
+    // });
   };
 
   return (
@@ -127,10 +178,22 @@ const ForgotPassword = () => {
                 label="Enter your email"
                 name="email"
                 autoComplete="email"
+                value={formData.email}
+                onChange={(e) =>
+                  setFormData({ ...formData, email: e.target.value })
+                }
               />
 
               <FormControl sx={logBtn}>
-                <ButtonUse name={"Submit"} />
+                {/* <ButtonUse name={"Submit"} /> */}
+                <Button
+                type="submit"
+                fullWidth
+                variant="outlined"
+                sx={commonButton}
+              >
+                Submit
+              </Button>
               </FormControl>
             </Box>
           </Box>

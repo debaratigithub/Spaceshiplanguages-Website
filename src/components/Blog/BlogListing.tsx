@@ -7,6 +7,7 @@ import blogImage3 from "../../../public/images/latestblog3.jpg";
 import CardUI from "../Ui/CardUI";
 import CommonPagination from "../Ui/CommonPagination";
 import { styles } from "@/app/styles";
+import Link from "next/link";
 
 const BlogData = [
   {
@@ -86,7 +87,10 @@ const BlogListing = () => {
         <Grid container spacing={4}>
           {BlogData.map((item, index) => (
             <Grid item xs={12} sm={6} md={4} key={index}>
+              <Link href="/blog-details">
               <CardUI itemData={item} />
+              </Link>
+              
             </Grid>
           ))}
         </Grid>
