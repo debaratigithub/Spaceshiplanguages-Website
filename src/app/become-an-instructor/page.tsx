@@ -34,7 +34,9 @@ const BecomeAnInstructor = () => {
               </Typography>
             </Stack>
             <Stack sx={buttonAction}>
-              <Link href="/instructor-registration">
+              {/* <Link href="/instructor-registration"> */}
+              <Link href="/auth/teacher-signup"> 
+              
               <ButtonUse name="Become an Instructor" />
               </Link>
               

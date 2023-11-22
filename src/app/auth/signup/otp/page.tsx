@@ -7,6 +7,7 @@ import ButtonUse from "@/components/ButtonUse";
 import { MuiOtpInput } from "mui-one-time-password-input";
 import optImage from "../../../../../public/images/otp.png";
 import Image from "next/image";
+import Link from "next/link";
 
 const OtpValidate = () => {
   const [otp, setOtp] = React.useState("");
@@ -47,7 +48,10 @@ const OtpValidate = () => {
                 <MuiOtpInput value={otp} onChange={handleChange} length={6} />
               </Stack>
               <FormControl sx={logBtn}>
+                <Link href="/language-select">
                 <ButtonUse name={"Verify"} />
+                </Link>
+                
               </FormControl>
             </Box>
           </Box>

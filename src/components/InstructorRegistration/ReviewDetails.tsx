@@ -478,7 +478,7 @@ const formWarp = (theme: Theme) => ({
     minWidth: "23rem",
     height: "4.875rem",
     fontSize: "1.625rem",
-    fontWight: 700,
+    fontWeight: 700,
     lineHeight: "normal",
     [theme.breakpoints.down("xl")]: {
       minWidth: "15rem",

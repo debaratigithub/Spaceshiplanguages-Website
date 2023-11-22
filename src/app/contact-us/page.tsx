@@ -1,12 +1,113 @@
 "use client";
 import CommonLayout from "@/components/CommonLayout";
-import { Grid, Box, Typography, Stack, TextField, Theme } from "@mui/material";
+import {
+  Grid,
+  Box,
+  Typography,
+  Stack,
+  TextField,
+  Theme,
+  FormControl,
+  Button,
+} from "@mui/material";
 import Image from "next/image";
 import loginBanner from "../../../public/images/blogdetlbnr.png";
 import ButtonUse from "@/components/ButtonUse";
 import { styles } from "../styles";
+import { useRouter } from "next/navigation";
+import { useAppDispatch, useAppSelector } from "../../reduxts/hooks";
+import { useState } from "react";
+import { contactUsData } from "@/reduxts/Slices/cmsauthslice/contactUsSlice";
 
-const page = () => {
+const logBtn = (theme: Theme) => ({
+  minWidth: "23rem",
+  marginTop: "3.75rem",
+
+  margin: "auto",
+
+  "& button": {
+    fontFamily: "'Karla', sans-serif",
+    fontSize: "1.625rem",
+    fontWeight: "700",
+    color: "#fff",
+    height: "4.875rem",
+    boxShadow: "none",
+    [theme.breakpoints.down("xl")]: {
+      height: "3.75rem",
+      fontSize: "1.25rem",
+    },
+  },
+});
+const commonButton = () => ({
+  backgroundColor: "#D91962",
+  margin: "auto",
+  fontFamily: "'Karla', sans-serif",
+  color: "#fff",
+  fontSize: "18px",
+  fontWeight: "600",
+  padding: "8px 30px",
+  borderRadius: "50px",
+  textTransform: "inherit",
+  "&:hover": {
+    backgroundColor: "#fad237",
+    color: "#000",
+  },
+});
+
+interface FormData {
+  email: string;
+  dasignation: string;
+  firstName: string;
+  lastName: string;
+  message: string;
+}
+
+interface FormDatanew {
+  email: string;
+  dasignation: string;
+  name: string;
+  message: string;
+}
+
+const ContactusPage = () => {
+  //const router = useRouter();
+  const dispatch = useAppDispatch();
+
+  const [formData, setFormData] = useState<FormData>({
+    email: "",
+    dasignation: "Teacher",
+    firstName: "",
+    lastName: "",
+    message: "",
+  });
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const fullName = `${formData.firstName} ${formData.lastName}`;
+
+    const updatedFormData: Omit<FormData, "firstName" | "lastName"> & {
+      name: string;
+    } = {
+      email: formData.email,
+      dasignation: "Teacher",
+      name: fullName,
+      message: formData.message,
+    };
+
+    console.log("Updated Form Data:", updatedFormData);
+    console.log(formData, "++++++");
+
+    dispatch(contactUsData(updatedFormData)).then((response: any) => {
+      console.log(response.payload, "response from login component");
+
+      if (response.payload.status == true) {
+        console.log("routing is done");
+      } else {
+        console.log("routing is not done");
+      }
+    });
+  };
   return (
     <CommonLayout>
       <Box sx={loginpagewrap}>
@@ -26,7 +127,7 @@ const page = () => {
             </Stack>
 
             <Stack sx={formInside}>
-              <Box component="form" noValidate>
+              <Box component="form" noValidate onSubmit={handleSubmit}>
                 <Typography variant="h4" sx={titleTxt}>
                   Get In Touch For Inquiries
                 </Typography>
@@ -44,6 +145,10 @@ const page = () => {
                       autoComplete="FirstName"
                       autoFocus
                       sx={styles.inputField}
+                      value={formData.firstName}
+                      onChange={(e) =>
+                        setFormData({ ...formData, firstName: e.target.value })
+                      }
                     />
                   </Grid>
                   <Grid item xs={6}>
@@ -55,6 +160,10 @@ const page = () => {
                       autoComplete="LastName"
                       autoFocus
                       sx={styles.inputField}
+                      value={formData.lastName}
+                      onChange={(e) =>
+                        setFormData({ ...formData, lastName: e.target.value })
+                      }
                     />
                   </Grid>
                   <Grid item xs={6}>
@@ -66,6 +175,10 @@ const page = () => {
                       autoComplete="Email"
                       autoFocus
                       sx={styles.inputField}
+                      value={formData.email}
+                      onChange={(e) =>
+                        setFormData({ ...formData, email: e.target.value })
+                      }
                     />
                   </Grid>
                   <Grid item xs={6}>
@@ -86,12 +199,26 @@ const page = () => {
                       variant="outlined"
                       multiline
                       rows={4}
-                      sx={styles.inputField}
+                      sx={(styles.inputField, { mb: 3 })}
+                      value={formData.message}
+                      onChange={(e) =>
+                        setFormData({ ...formData, message: e.target.value })
+                      }
                     />
                   </Grid>
-                  <Grid item xs={12}>
-                    <ButtonUse name="Submit" />
-                  </Grid>
+                  <FormControl sx={logBtn}>
+                    {/* <Grid item xs={12}>
+                      <ButtonUse name="Submit" type="submit" />
+                    </Grid> */}
+                    <Button
+                      type="submit"
+                      fullWidth
+                      variant="outlined"
+                      sx={commonButton}
+                    >
+                      Submit
+                    </Button>
+                  </FormControl>
                 </Grid>
               </Box>
             </Stack>
@@ -183,4 +310,4 @@ const subtitleTxt = (theme: Theme) => ({
     fontSize: "1.375rem",
   },
 });
-export default page;
+export default ContactusPage;

@@ -143,7 +143,13 @@ const ForgotPassword = () => {
 
       if (response.payload.status == true) {
         console.log("routing is done");
-        router.push("/auth/verify-forgetpassword");
+        localStorage.setItem("userEmail",formData.email)
+         router.push("/auth/verify-forgetpassword");
+
+        // router.push({
+        //   pathname: '/auth/verify-forgetpassword',
+        //   query: { email: formData.email },
+        // } as any)
       } else {
         console.log("routing is not done");
       }

@@ -43,8 +43,25 @@ const OtpValidate = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
 
+  const [useremail, setUseremail] = useState<string>("")
+
+  useEffect(() => {
+    const emailid = localStorage.getItem("userEmail");
+    if (emailid) {
+      // If it's true, update the login state
+      setUseremail(emailid)
+      setFormData({
+    email: useremail,
+    role: 'student',
+    otp: otp
+      })
+    }
+  }, [useremail])
+  
+  console.log(useremail,"+++++++++")
+
   const [formData, setFormData] = useState<FormData>({
-    email: 'debarati.patwari@brainiuminfotech.com',
+    email: useremail,
     role: 'student',
     otp: otp
   });
@@ -99,7 +116,7 @@ const OtpValidate = () => {
             </Stack>
             <Typography variant="h4">Enter OTP sent to the email</Typography>
             <Typography variant="h6" component="p">
-              Please enter 6 digit code sent to {formData.email}
+              Please enter 6 digit code sent to {useremail}
             </Typography>
 
             <Box

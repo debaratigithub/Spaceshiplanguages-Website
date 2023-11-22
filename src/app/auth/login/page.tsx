@@ -223,10 +223,12 @@ const Login = () => {
 
     dispatch(loginData(formData)).then((response: any) => {
       console.log(response.payload, "response from login component");
+      
 
       if (response.payload.status == true) {
+        localStorage.setItem("loginstatus",true.toString());
         console.log("routing is done");
-        //router.push("/dashboard");
+        router.push("/");
       } else {
         console.log("routing is not done");
       }
@@ -344,7 +346,11 @@ const Login = () => {
               <SocialLinks tagHead="Login With" />
               <Typography variant="h6" sx={loginbtmtxt}>
                 {`Don't have an account?`}
-                <Link href="/auth/signup">Sign Up</Link>
+                <Link href="/auth/signup">Sign Up As Student</Link>
+                
+              </Typography>
+              <Typography variant="h6" sx={loginbtmtxt}>
+              <Link href="/auth/signup">Sign Up As Teacher</Link>
               </Typography>
             </Box>
           </Box>

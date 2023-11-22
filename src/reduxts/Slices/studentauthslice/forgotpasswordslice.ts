@@ -1,3 +1,4 @@
+import { fetchForgetpass } from "@/services/api";
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 //import { useRouter } from 'next/navigation';
 import { toast } from "react-toastify";
@@ -8,7 +9,7 @@ interface FormData {
 }
 
 interface DataState {
-  loginData: FormData | null;
+  forgetpassData: FormData | null;
   loading: boolean;
   error: string | null;
 }
@@ -17,17 +18,18 @@ export const forgotPasswordData = createAsyncThunk<FormData, FormData>(
   "ForgotPassword",
   async (data) => {
     //const router = useRouter();
-    const response = await fetch(
-      "https://nodeserver.mydevfactory.com:6014/api/auth/forgot-password",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      }
-    );
-    const responseData = await response.json();
+    // const response = await fetch(
+    //   "https://nodeserver.mydevfactory.com:6014/api/auth/forgot-password",
+    //   {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify(data),
+    //   }
+    // );
+    // const responseData = await response.json();
+    const responseData = await fetchForgetpass(data);
     if(responseData.status==true){
       toast.success(responseData.message);
       // localStorage.setItem("Status", responseData.status)
@@ -48,7 +50,7 @@ export const forgotPasswordData = createAsyncThunk<FormData, FormData>(
 );
 
 const initialState: DataState = {
-  loginData: null,
+  forgetpassData: null,
   loading: false,
   error: null,
 };
@@ -68,7 +70,7 @@ const forgotpasswordSlice = createSlice({
         (state, action: PayloadAction<FormData>) => {
           //console.log("reducer from forgot pass slice example", action);
           state.loading = false;
-          state.loginData = action.payload;
+          state.forgetpassData = action.payload;
         }
       )
       .addCase(forgotPasswordData.rejected, (state, action) => {

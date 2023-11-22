@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState ,useEffect} from "react";
 import {
   Button,
   ButtonBase,
@@ -24,12 +24,32 @@ import countryIcon from "../../../public/images/map1.png";
 import ButtonUse from "../ButtonUse";
 import Link from "next/link";
 
+//Redux Toolkit
+import { RootState} from '../../reduxts/store'
+import {useAppDispatch, useAppSelector} from '../../reduxts/hooks'
+import {getTeacherListData} from '../../reduxts/Slices/teacherauthslice/teacherListSlice'
+
+
 type CardType = {
-  setVideohover: React.Dispatch<React.SetStateAction<boolean>>;
+  setVideohover?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const InstructorCard = (props: CardType) => {
-  const { setVideohover } = props;
+
+    //calling all student data through redux
+    const dispatch = useAppDispatch();
+
+    useEffect(() => {
+      // Dispatch the fetchSomeDataAsync action when the component mounts
+      dispatch(getTeacherListData());
+     
+    }, [dispatch]);
+  
+    const apiuserdata = useAppSelector((state: RootState) =>state?.teacherListData?.teacherListData?.teacherList);
+    console.log(apiuserdata,"++++FROM CARD+++++++")
+
+
+  // const { setVideohover } = props;
 
   const [liked, setLiked] = useState<boolean>(false);
   const [less, setLess] = useState<boolean>(false);
@@ -43,9 +63,10 @@ const InstructorCard = (props: CardType) => {
       sx={instCard}
       elevation={0}
       style={{ marginBottom: "3.5rem" }}
-      onMouseEnter={(e: React.MouseEvent) => setVideohover(true)}
+      // onMouseEnter={(e: React.MouseEvent) => setVideohover(true)}
     >
-      <Grid container spacing={2}>
+      {apiuserdata && apiuserdata.length>0 && apiuserdata.map((teacherdata:any,teacherdataIndex:any)=>(
+        <Grid container spacing={2} key={teacherdataIndex}>
         <Grid item sx={imgPrt}>
           <ButtonBase sx={profileImage}>
             <Image src={DrImg} alt="complex" fill sizes="100vw" />
@@ -64,7 +85,7 @@ const InstructorCard = (props: CardType) => {
           <Grid item xs container direction="column" spacing={2}>
             <Grid item xs>
               <Typography sx={tTitle} variant="subtitle1" component="h2">
-                <Link href={`instructor-details/${1}`}> Laura MacCullach</Link>
+                <Link href={`/find-an-instructor/${teacherdata.id}`}> {teacherdata.name}</Link>
               </Typography>
               <Typography variant="body2" gutterBottom sx={subtxt}>
                 Professional Teacher
@@ -124,6 +145,87 @@ const InstructorCard = (props: CardType) => {
           </IconButton>
         </Grid>
       </Grid>
+      ))}
+      
+      {/* <Grid container spacing={2}>
+        <Grid item sx={imgPrt}>
+          <ButtonBase sx={profileImage}>
+            <Image src={DrImg} alt="complex" fill sizes="100vw" />
+            <Stack sx={countryImage}>
+              <Image src={countryIcon} alt="#" fill sizes="100vw" />
+            </Stack>
+          </ButtonBase>
+          <Typography component="div" sx={ratingtxt}>
+            <StarIcon /> 5.0
+          </Typography>
+          <Typography variant="body2" component="h6" sx={lessontxt}>
+            1050 Lessons
+          </Typography>
+        </Grid>
+        <Grid item xs={12} sm container>
+          <Grid item xs container direction="column" spacing={2}>
+            <Grid item xs>
+              <Typography sx={tTitle} variant="subtitle1" component="h2">
+                <Link href={`/find-an-instructor/${1}`}> Laura MacCullach</Link>
+              </Typography>
+              <Typography variant="body2" gutterBottom sx={subtxt}>
+                Professional Teacher
+              </Typography>
+              <Stack
+                spacing={2}
+                direction="row"
+                alignItems="center"
+                flexWrap="wrap"
+              >
+                <Typography variant="body2" component="h6" sx={subtxt}>
+                  Speaks:
+                </Typography>
+                <Button sx={langchip}>
+                  English <Chip sx={native} label="NATIVE" />
+                </Button>
+                <Button sx={langchip}>
+                  English <Chip sx={upperInter} label="UPPER-INTERMEDIATE" />
+                </Button>
+              </Stack>
+              <Typography
+                variant="body2"
+                sx={detailsTxt}
+                style={{ display: less ? "block" : "" }}
+              >
+                Hi, I’m Laura and I’m a qualified English teacher from Scotland,
+                now based in Spain. I love teaching English to adults, which is
+                why I have been doing it full-time for 20 years. In fact, Hi,
+                I’m Laura and I’m a qualified English teacher from Scotland, now
+                based in Spain. I love teaching English to adults, which is why
+                I have been doing it full-time for 20 years. In fact
+              </Typography>
+              <Button sx={lessMore} onClick={() => funcshowHide()}>
+                {less ? "Less" : "More"}
+                {less ? <ExpandLessSharpIcon /> : <ExpandMoreSharpIcon />}
+              </Button>
+              <CardActions sx={cardAction}>
+                <Stack>
+                  <Typography variant="h6" sx={actsubtxt} component="h6">
+                    Lessons start from
+                  </Typography>
+                  <Typography variant="h4" sx={acttxt} component="h4">
+                    USD 9.00
+                  </Typography>
+                </Stack>
+                <ButtonUse name="Book Session" />
+              </CardActions>
+            </Grid>
+          </Grid>
+
+          <IconButton
+            sx={likeIcon}
+            aria-label="delete"
+            onClick={() => setLiked(!liked)}
+          >
+            {liked ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+          </IconButton>
+        </Grid>
+      </Grid> */}
     </Card>
   );
 };

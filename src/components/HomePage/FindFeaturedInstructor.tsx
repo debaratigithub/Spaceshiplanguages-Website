@@ -4,6 +4,7 @@ import insTructor from "../../../public/images/feat1.jpg";
 
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
+import { useEffect, useState } from "react";
 
 // Import Swiper styles
 import "swiper/css";
@@ -11,6 +12,12 @@ import "swiper/css/navigation";
 import { Navigation } from "swiper/modules";
 import CardUI from "../Ui/CardUI";
 import { styles } from "@/app/styles";
+import { useDispatch, useSelector } from "react-redux";
+
+//Redux toolkit
+import { getTeacherListData } from "@/reduxts/Slices/teacherauthslice/teacherListSlice";
+import { useAppDispatch, useAppSelector } from "@/reduxts/hooks";
+import { RootState } from "@/reduxts/store";
 
 const InstructData = [
   {
@@ -70,6 +77,15 @@ const InstructData = [
 ];
 
 const FindFeaturedInstructor = () => {
+  const { teacherListData } = useAppSelector(
+    (state: RootState) => state.teacherListData
+  );
+  console.log(teacherListData,"+++++++++")
+
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(getTeacherListData());
+  }, [dispatch]);
   return (
     <Box sx={instructorWrap}>
       <Stack sx={styles.container}>
@@ -86,7 +102,7 @@ const FindFeaturedInstructor = () => {
             // onSlideChange={() => console.log("slide change")}
             // onSwiper={(swiper) => console.log(swiper)}
           >
-            {InstructData.map((item, index) => (
+            {teacherListData?.teacherList.map((item:any, index:any) => (
               <SwiperSlide key={index}>
                 <CardUI itemData={item} />
               </SwiperSlide>

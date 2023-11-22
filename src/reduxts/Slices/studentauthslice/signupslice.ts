@@ -1,4 +1,5 @@
 
+import { fetchSignup } from '@/services/api';
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { useRouter } from 'next/navigation';
 import { toast } from "react-toastify";
@@ -12,21 +13,22 @@ interface FormData {
 }
 
 interface DataState {
-  loginData: FormData | null;
+  registrationData: FormData | null;
   loading: boolean;
   error: string | null;
 }
 
 export const signupData = createAsyncThunk<FormData, FormData>('student/signupData', async (data) => {
  //  const router = useRouter();
-  const response = await fetch('https://nodeserver.mydevfactory.com:6014/api/auth/register', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  });
-  const responseData = await response.json();
+  // const response = await fetch('https://nodeserver.mydevfactory.com:6014/api/auth/register', {
+  //   method: 'POST',
+  //   headers: {
+  //     'Content-Type': 'application/json',
+  //   },
+  //   body: JSON.stringify(data),
+  // });
+  // const responseData = await response.json();
+  const responseData = await fetchSignup(data);
   if(responseData.status==true){
     toast.success(responseData.message);
     // localStorage.setItem("Status", responseData.status)
@@ -44,7 +46,7 @@ export const signupData = createAsyncThunk<FormData, FormData>('student/signupDa
 });
 
 const initialState: DataState = {
-  loginData: null,
+  registrationData: null,
   loading: false,
   error: null,
 };
@@ -62,7 +64,7 @@ const signupSlice = createSlice({
      
       //  console.log("reducer from admin login slice example", action);    
         state.loading = false;
-            state.loginData = action.payload;
+            state.registrationData = action.payload;
            
           }).addCase(signupData.rejected,(state, action)=>{
             

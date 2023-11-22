@@ -15,6 +15,10 @@ import blogImage2 from "../../../public/images/latestblog2.jpg";
 import blogImage3 from "../../../public/images/latestblog3.jpg";
 import CardUI from "../Ui/CardUI";
 import { styles } from "@/app/styles";
+import { useAppDispatch, useAppSelector } from "@/reduxts/hooks";
+import { RootState } from "@/reduxts/store";
+import { useEffect } from "react";
+import { getBlogListData } from "@/reduxts/Slices/Blog/blogListSlice";
 
 const BlogData = [
   {
@@ -55,6 +59,14 @@ const BlogData = [
 ];
 
 const LatestBlogs = () => {
+  const { blogListData } = useAppSelector(
+    (state: RootState) => state.blogListData
+  );
+
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(getBlogListData());
+  }, [dispatch]);
   return (
     <Box sx={latesBlgwrp}>
       <Grid container sx={styles.container}>
@@ -68,7 +80,7 @@ const LatestBlogs = () => {
             navigation={true}
             modules={[Navigation]}
           >
-            {BlogData.map((item, index) => (
+            {blogListData?.allBlog.map((item:any, index:any) => (
               <SwiperSlide key={index}>
                 {/* <Card sx={blogCard}>
                   <Image
@@ -95,7 +107,7 @@ const LatestBlogs = () => {
                     </Typography>
                   </CardContent>
                 </Card> */}
-                <CardUI itemData={item} />
+                <CardUI itemData={item} blog />
               </SwiperSlide>
             ))}
           </Swiper>

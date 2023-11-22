@@ -10,6 +10,8 @@ import {
 import Image, { StaticImageData } from "next/image";
 import ButtonUse from "../ButtonUse";
 import dtIcon from "../../../public/images/dt.png";
+import insTructor from "../../../public/images/feat1.jpg";
+import Link from "next/link";
 
 type ItemsProps = {
   name?: string;
@@ -18,6 +20,7 @@ type ItemsProps = {
   image?: StaticImageData | string;
   price?: number;
   itemData: ItemData;
+  blog?: boolean;
 };
 type ItemData = {
   name?: string;
@@ -27,16 +30,31 @@ type ItemData = {
   price?: number;
   date?: string;
   actionBar?: boolean;
+  blog?: boolean;
+  id?:string
 };
-const CardUI = (props: ItemsProps) => {
-  const { name, date, description, image, languages, actionBar } =
-    props.itemData;
 
+
+const CardUI = (props: ItemsProps) => {
+  //console.log(props.itemData,"home page teacher")
+  const teacherId=props.itemData.id;
+  console.log(teacherId,"home page teacher")
+  const { name, date, description, image, actionBar, blog} = props.itemData;
+  const languages = ["english", "spanish", "french"];
   return (
     <Card elevation={0} sx={productCard}>
-      {image && <Image src={image} height={205} width={500} alt="alt text" />}
+      {image ? (
+        <Image src={image} height={205} width={500} alt="alt text" />
+      ) : (
+        <Image src={insTructor} height={205} width={500} alt="alt text" />
+      )}
       <CardContent>
-        {date && (
+        {date ? (
+          <Stack direction="row" sx={dategap}>
+            <Image src={dtIcon} width={21} height={21} alt="alt text" />
+            <Typography sx={datetxt}>{date}</Typography>
+          </Stack>
+        ) : (
           <Stack direction="row" sx={dategap}>
             <Image src={dtIcon} width={21} height={21} alt="alt text" />
             <Typography sx={datetxt}>{date}</Typography>
@@ -44,32 +62,57 @@ const CardUI = (props: ItemsProps) => {
         )}
         {name && (
           <Typography variant="h4" sx={instName}>
-            {name}
+            {name.charAt(0).toUpperCase() + name.slice(1)}
           </Typography>
         )}
-        {description && (
+        {description ? (
           <Typography variant="body2" sx={instDesc}>
             {description}
           </Typography>
+        ) : (
+          <Typography variant="body2" sx={instDesc}>
+            Lorem Ipsum is simply dummy text of the printing and typesetting...
+          </Typography>
         )}
-
-        {languages &&
-          languages.map((language, index) => (
-            <Chip sx={langBtn} key={index} label={language} />
-          ))}
+        {!blog && (
+          <>
+            {languages.map((language, index) => (
+              <Chip sx={langBtn} key={index} label={language} />
+            ))}
+          </>
+        )}
       </CardContent>
-      {actionBar && (
-        <CardActions sx={cardAction}>
-          <Stack>
-            <Typography variant="h5" sx={lessonTxt}>
-              Lessons start from
-            </Typography>
-            <Typography variant="h4" sx={priceTxt}>
-              USD 9.00
-            </Typography>
-          </Stack>
-          <ButtonUse name="Book Session" />
-        </CardActions>
+      {!blog && (
+        <>
+          {actionBar ? (
+            <CardActions sx={cardAction}>
+              <Stack>
+                <Typography variant="h5" sx={lessonTxt}>
+                  Lessons start from
+                </Typography>
+                <Typography variant="h4" sx={priceTxt}>
+                  USD 9.00
+                </Typography>
+              </Stack>
+              <ButtonUse name="Book Session" />
+            </CardActions>
+          ) : (
+            <CardActions sx={cardAction}>
+              <Stack>
+                <Typography variant="h5" sx={lessonTxt}>
+                  Lessons start from
+                </Typography>
+                <Typography variant="h4" sx={priceTxt}>
+                  USD 9.00
+                </Typography>
+              </Stack>
+              <Link href={`/find-an-instructor/${teacherId}`}> 
+              <ButtonUse name="Book Session" />
+              </Link>
+              
+            </CardActions>
+          )}
+        </>
       )}
     </Card>
   );
@@ -132,7 +175,7 @@ const cardAction = () => ({
 const lessonTxt = () => ({
   color: "#1E1E1C",
   fontFamily: "'Karla', sans-serif",
-  fontSize: "1.625rem",
+  fontSize: "1.025rem",
   fontWeight: 400,
   lineHeight: "normal",
 });

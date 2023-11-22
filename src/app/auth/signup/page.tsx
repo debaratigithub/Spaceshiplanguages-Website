@@ -282,7 +282,7 @@ const Signup = () => {
 
         if (response.payload.status == true) {
           console.log("routing is done");
-          //router.push("/dashboard");
+          router.push("/auth/signup/otp");
         } else {
           console.log("routing is not done");
         }

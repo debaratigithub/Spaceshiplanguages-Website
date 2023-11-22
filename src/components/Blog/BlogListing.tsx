@@ -8,10 +8,14 @@ import CardUI from "../Ui/CardUI";
 import CommonPagination from "../Ui/CommonPagination";
 import { styles } from "@/app/styles";
 import Link from "next/link";
+import { useAppDispatch, useAppSelector } from "@/reduxts/hooks";
+import { RootState } from "@/reduxts/store";
+import { useEffect } from "react";
+import {getBlogListData} from "../../reduxts/Slices/Blog/blogListSlice";
 
 const BlogData = [
   {
-    name: "The standard chunk of Lorem Ipsum used since",
+    name: "The standard chunk of ",
     description:
       "It is a long established fact that a reader will be distracted by the readable...",
     date: "03-08-2023",
@@ -68,7 +72,7 @@ const BlogData = [
     image: blogImage3,
   },
   {
-    name: "The standard chunk of Lorem Ipsum used since",
+    name: "The standard chunk of Lorem e",
     description:
       "It is a long established fact that a reader will be distracted by the readable...",
     date: "03-08-2023",
@@ -77,6 +81,14 @@ const BlogData = [
 ];
 
 const BlogListing = () => {
+  const { blogListData } = useAppSelector(
+    (state: RootState) => state.blogListData
+  );
+
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(getBlogListData());
+  }, [dispatch]);
   return (
     <Box sx={latesBlgwrp}>
       <Grid container sx={styles.container}>
@@ -85,12 +97,11 @@ const BlogListing = () => {
         </Typography>
 
         <Grid container spacing={4}>
-          {BlogData.map((item, index) => (
+          {blogListData?.allBlog.map((item:any, index:any) => (
             <Grid item xs={12} sm={6} md={4} key={index}>
               <Link href="/blog-details">
-              <CardUI itemData={item} />
+                <CardUI itemData={item} blog />
               </Link>
-              
             </Grid>
           ))}
         </Grid>

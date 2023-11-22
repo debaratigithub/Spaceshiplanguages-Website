@@ -18,7 +18,8 @@ const Footer = () => {
     { label: "Contact", href: "/contact-us" },
     { label: "Blog", href: "/blog" },
     { label: "Legal", href: "/legal" },
-    { label: "Privacy", href: "/privacy" },
+    { label: "Privacy", href: "/privacy-policy" },
+    { label: "Terms & Conditions", href: "/terms-and-conditions" },
     { label: "Faq", href: "/faq" },
   ];
 
@@ -31,7 +32,7 @@ const Footer = () => {
           <Grid item sm={12} md={4} sx={logoresp}>
             <Box sx={logowidth}>
               <Link href="/">
-                <Image src={logo} alt="Logo" />
+                <Image src={logo} alt="Logo footer" />
               </Link>
             </Box>
           </Grid>
